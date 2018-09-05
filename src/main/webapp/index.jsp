@@ -5,12 +5,12 @@
     <title>Java后端WebSocket的Tomcat实现</title>
 </head>
 <body>
-    Welcome<br/><input id="text" type="text"/>
+    Welcome<br/><input id="text" type="text" onkeypress="invokeSend()" />
     <button onclick="send()">发送消息</button>
     <hr/>
     <button onclick="closeWebSocket()">关闭WebSocket连接</button>
     <hr/>
-    <div id="message"></div>
+    <div id="message" style="height:500px;width:500px;overflow:auto"></div>
 </body>
 
 <script type="text/javascript">
@@ -35,7 +35,7 @@
 
     //接收到消息的回调方法
     websocket.onmessage = function (event) {
-        setMessageInnerHTML(">>"+event.data);
+        setMessageInnerHTML(">> "+event.data);
     }
 
     //连接关闭的回调方法
@@ -50,7 +50,9 @@
 
     //将消息显示在网页上
     function setMessageInnerHTML(innerHTML) {
-        document.getElementById('message').innerHTML += innerHTML + '<br/>';
+        var div = document.getElementById('message');
+        div.innerHTML += innerHTML + '<br/>';
+        div.scrollTop = div.scrollHeight;
     }
 
     //关闭WebSocket连接
@@ -63,5 +65,14 @@
         var message = document.getElementById('text').value;
         websocket.send(message);
     }
+
+    function invokeSend() {
+        if (event.keyCode == 13) {
+            send();
+            document.getElementById('text').value="";
+        }
+    }
+
+
 </script>
 </html>
